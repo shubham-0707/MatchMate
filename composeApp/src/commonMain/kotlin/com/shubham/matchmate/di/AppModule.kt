@@ -13,10 +13,16 @@ val appModule = module {
     singleOf(::MockPollRepository).bind<PollRepository>()
     singleOf(::MockUserRepository).bind<UserRepository>()
     singleOf(::MockThreadRepository).bind<ThreadRepository>()
+    singleOf(::MockTimelineRepository).bind<TimelineRepository>()
+    singleOf(::MockLeaderboardRepository).bind<LeaderboardRepository>()
+    singleOf(::MockPredictionRepository).bind<PredictionRepository>()
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MatchDetailViewModel)
     viewModelOf(::AuthViewModel)
     viewModelOf(::ProfileViewModel)
     viewModelOf(::ThreadsViewModel)
+    viewModelOf(::TimelineViewModel)
+    viewModelOf(::LeaderboardViewModel)
+    viewModelOf(::PredictionViewModel)
 }

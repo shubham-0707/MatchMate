@@ -14,4 +14,8 @@ sealed interface Route {
     @Serializable data class PostMatchThreads(val matchId: String) : Route
     @Serializable data class ThreadDetail(val threadId: String, val matchId: String) : Route
     @Serializable data object Settings : Route
+    @Serializable data class MatchTimeline(val matchId: String) : Route
+    @Serializable data class Leaderboard(val matchId: String? = null) : Route
+    @Serializable data class Predictions(val matchId: String) : Route
+    @Serializable data class HeadToHead(val team1Id: String, val team2Id: String) : Route
 }

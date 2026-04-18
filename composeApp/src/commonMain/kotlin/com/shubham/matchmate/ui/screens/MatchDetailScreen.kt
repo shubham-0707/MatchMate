@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +23,10 @@ import org.koin.compose.viewmodel.koinViewModel
 fun MatchDetailScreen(
     matchId: String,
     onBack: () -> Unit,
+    onTimelineClick: () -> Unit = {},
+    onLeaderboardClick: () -> Unit = {},
+    onPredictionsClick: () -> Unit = {},
+    onH2HClick: (String, String) -> Unit = { _, _ -> },
     viewModel: MatchDetailViewModel = koinViewModel()
 ) {
     val match by viewModel.match.collectAsState()
@@ -57,6 +62,39 @@ fun MatchDetailScreen(
             Column(modifier = Modifier.fillMaxSize().padding(padding)) {
                 // Score header
                 LiveScoreCard(match = m, modifier = Modifier.padding(horizontal = 16.dp))
+
+                // Quick Action Buttons for new features
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    QuickActionChip(
+                        icon = Icons.Filled.Timeline,
+                        label = "Timeline",
+                        onClick = onTimelineClick,
+                        modifier = Modifier.weight(1f)
+                    )
+                    QuickActionChip(
+                        icon = Icons.Filled.Leaderboard,
+                        label = "Ranks",
+                        onClick = onLeaderboardClick,
+                        modifier = Modifier.weight(1f)
+                    )
+                    QuickActionChip(
+                        icon = Icons.Filled.EmojiEvents,
+                        label = "Predict",
+                        onClick = onPredictionsClick,
+                        modifier = Modifier.weight(1f)
+                    )
+                    QuickActionChip(
+                        icon = Icons.Filled.CompareArrows,
+                        label = "H2H",
+                        onClick = { onH2HClick(m.team1.id, m.team2.id) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
 
                 // Current batsmen & bowler
                 if (m.status == MatchStatus.LIVE && m.currentBatsmen.isNotEmpty()) {
@@ -189,6 +227,24 @@ fun MatchDetailScreen(
         } ?: Box(modifier = Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
+    }
+}
+
+@Composable
+private fun QuickActionChip(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    FilledTonalButton(
+        onClick = onClick,
+        modifier = modifier.height(40.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        Icon(icon, contentDescription = label, modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.width(4.dp))
+        Text(label, style = MaterialTheme.typography.labelSmall, maxLines = 1)
     }
 }
 

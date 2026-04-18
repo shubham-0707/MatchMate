@@ -73,7 +73,11 @@ fun AppNavigation() {
             val route = backStackEntry.toRoute<Route.MatchDetail>()
             MatchDetailScreen(
                 matchId = route.matchId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onTimelineClick = { navController.navigate(Route.MatchTimeline(route.matchId)) },
+                onLeaderboardClick = { navController.navigate(Route.Leaderboard(route.matchId)) },
+                onPredictionsClick = { navController.navigate(Route.Predictions(route.matchId)) },
+                onH2HClick = { t1, t2 -> navController.navigate(Route.HeadToHead(t1, t2)) }
             )
         }
 
@@ -111,6 +115,39 @@ fun AppNavigation() {
 
         composable<Route.Settings> {
             SettingsScreen(onBack = { navController.popBackStack() })
+        }
+
+        composable<Route.MatchTimeline> { backStackEntry ->
+            val route = backStackEntry.toRoute<Route.MatchTimeline>()
+            MatchTimelineScreen(
+                matchId = route.matchId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Route.Leaderboard> { backStackEntry ->
+            val route = backStackEntry.toRoute<Route.Leaderboard>()
+            LeaderboardScreen(
+                matchId = route.matchId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Route.Predictions> { backStackEntry ->
+            val route = backStackEntry.toRoute<Route.Predictions>()
+            PredictionScreen(
+                matchId = route.matchId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<Route.HeadToHead> { backStackEntry ->
+            val route = backStackEntry.toRoute<Route.HeadToHead>()
+            HeadToHeadScreen(
+                team1Id = route.team1Id,
+                team2Id = route.team2Id,
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }
